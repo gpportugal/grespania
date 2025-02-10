@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/grespania/static/css/main.5eab60db.css",
-    "main.js": "/grespania/static/js/main.314cd6ca.js",
+    "main.js": "/grespania/static/js/main.d8a400c0.js",
     "static/media/leroyMerlin.png": "/grespania/static/media/leroyMerlin.08b95884123d674b4e9c.png",
     "static/media/margres.png": "/grespania/static/media/margres.9604946867b92a3bb685.png",
     "index.html": "/grespania/index.html",
     "main.5eab60db.css.map": "/grespania/static/css/main.5eab60db.css.map",
-    "main.314cd6ca.js.map": "/grespania/static/js/main.314cd6ca.js.map"
+    "main.d8a400c0.js.map": "/grespania/static/js/main.d8a400c0.js.map"
   },
   "entrypoints": [
     "static/css/main.5eab60db.css",
-    "static/js/main.314cd6ca.js"
+    "static/js/main.d8a400c0.js"
   ]
 }
