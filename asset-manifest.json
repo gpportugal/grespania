@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.css": "/static/css/main.5eab60db.css",
-    "main.js": "/static/js/main.75876308.js",
-    "static/media/leroyMerlin.png": "/static/media/leroyMerlin.08b95884123d674b4e9c.png",
-    "static/media/margres.png": "/static/media/margres.9604946867b92a3bb685.png",
-    "index.html": "/index.html",
-    "main.5eab60db.css.map": "/static/css/main.5eab60db.css.map",
-    "main.75876308.js.map": "/static/js/main.75876308.js.map"
+    "main.css": "/gpp/static/css/main.5eab60db.css",
+    "main.js": "/gpp/static/js/main.75876308.js",
+    "static/media/leroyMerlin.png": "/gpp/static/media/leroyMerlin.08b95884123d674b4e9c.png",
+    "static/media/margres.png": "/gpp/static/media/margres.9604946867b92a3bb685.png",
+    "index.html": "/gpp/index.html",
+    "main.5eab60db.css.map": "/gpp/static/css/main.5eab60db.css.map",
+    "main.75876308.js.map": "/gpp/static/js/main.75876308.js.map"
   },
   "entrypoints": [
     "static/css/main.5eab60db.css",
