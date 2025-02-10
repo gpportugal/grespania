@@ -13,6 +13,9 @@ function App() {
   const [C1, setC1] = useState();
   const [PVP_Caixa, setPVPCaixa] = useState();
   const [PVP_m2, setPVPM2] = useState();
+  const [Codice, setCodice] = useState();
+  const [UnVenda, setUnVenda] = useState();
+  const [m2Caixa, setm2Caixa] = useState();
 
   useEffect(() => {
     fetchSheetData();
@@ -57,7 +60,7 @@ function App() {
 
   const fetchSheetData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/");
+      const response = await fetch("https://api-sheets-687f24987b48.herokuapp.com/");
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -77,11 +80,13 @@ function App() {
     setC1(null);
     setPVPCaixa(null);
     setPVPM2(null);
+    setCodice(null);
+    setUnVenda(null);
+    setm2Caixa(null);
   };
 
   const handleSelectChange = (header, value) => {
-    console.log(header);
-    if (header !== "Margem") {
+    if(header !== "Margem"){
       setFilters(prev => ({
         ...prev,
         [header]: value,
@@ -90,26 +95,34 @@ function App() {
     setC1(null);
     setPVPCaixa(null);
     setPVPM2(null);
+    setCodice(null);
     handleCalc();
   };
 
   const handleCalc = () => {
     let c = 0;
     let options = document.getElementsByClassName("select-options");
-    Array.from(options).forEach((option) => {
-      if (option.value == "") {
+    Array.from(options).slice(0, -4).forEach((option) => { 
+      console.log(option.value);
+      if (option.value === "0" || option.value === "") {
         c = 1;
       }
     });
-    if (c == 0) {
+    if (c === 0) {
+      let codice = getFilteredOptionsForColumn("Codice EAN/UPC");
+      setCodice(codice[0]);
+      let unVenda = getFilteredOptionsForColumn("UM Preço");
+      setUnVenda(unVenda[0]);
+      let m2Caixa = getFilteredOptionsForColumn("m2_Caixa");
+      setm2Caixa(m2Caixa[0]);
       let preco = parseFloat(options[5].value.replace(/\s+/g, "").replace(',', '.'));
-      console.log(preco);
-      let un = options[6].value;
-      let m2 = parseFloat(options[7].value.replace(',', '.'));
+      let un = unVenda[0];
+      console.log(m2Caixa[0]);
+      let m2 = parseFloat(m2Caixa[0].replace(',', '.'));
       let tempC1;
-      if (un == "PC") {
+      if (un === "PC") {
         tempC1 = 0.7 * preco;
-      } else if (un == "M2") {
+      } else if (un === "M2") {
         tempC1 = (preco * m2) * 0.7;
       }
       tempC1 = parseFloat(tempC1.toFixed(2));
@@ -120,16 +133,14 @@ function App() {
       tempC1 = parseFloat(tempC1.replace(" €", "").replace(',', '.'));
       let tempPVPCaixa = (tempC1 * 1.23) / (100 - marg) * 100;
       tempPVPCaixa = parseFloat(tempPVPCaixa.toFixed(2));
-      // console.log(tempC1, marg, tempPVPCaixa);
       tempPVPCaixa = tempPVPCaixa.toString().replace('.', ',') + " €";
       setPVPCaixa(tempPVPCaixa);
 
-      if (un == "PC") {
+      if (un === "PC") {
         setPVPM2(tempPVPCaixa);
-      } else if (un == "M2") {
+      } else if (un === "M2") {
         tempPVPCaixa = parseFloat(tempPVPCaixa.replace(" €", "").replace(',', '.'));
         let tempPVPm2 = tempPVPCaixa / m2;
-        // console.log(tempPVPCaixa, m2, tempPVPm2);
         tempPVPm2 = parseFloat(tempPVPm2.toFixed(2));
         tempPVPm2 = tempPVPm2.toString().replace('.', ',') + " €";
         setPVPM2(tempPVPm2);
@@ -160,10 +171,25 @@ function App() {
     };
   }, [data, filters]);
 
+  const headers = Array.from(columnMap.keys());
+
+  const getHeaderLabel = (header) => {
+    switch (header) {
+      case 'Descrição':
+        return 'Designação';
+      case 'Preço':
+        return 'Preço Tabela';
+      case 'UM Preço':
+        return 'Unidade de Venda';
+      default:
+        return header;
+    }
+  };
+
   return (
     <>
       <div className="painel">
-        <h1>Tab. Grespanaria</h1>
+        <h1>Tabela Grespanaria(Love/Margres/Kerlite/Linea)2025</h1>
 
         {loading && <p>Carregando dados...</p>}
         {error && <p>Erro: {error}</p>}
@@ -171,21 +197,38 @@ function App() {
         {!loading && !error && (
           <>
             <div className="container">
-              {Array.from(columnMap).map(([header], headerIndex) => (
+              {headers.map((header, headerIndex) => (
                 <div key={header}>
-                  <p>{header}</p>
-                  <select
-                    className="select-options"
-                    onChange={(e) => handleSelectChange(header, e.target.value)}
-                    value={filters[header] || ''}
-                  >
-                    <option value="">{header}</option>
-                    {getFilteredOptionsForColumn(header).map((value, index) => (
-                      <option key={index} value={value}>
-                        {value}
-                      </option>
-                    ))}
-                  </select>
+                  <p>{getHeaderLabel(header)}</p>
+                  {headerIndex === headers.length - 1 || headerIndex === headers.length - 2 || headerIndex === headers.length - 3 ? (
+                    <input
+                      type="text"
+                      className="select-options"
+                      value={headerIndex === headers.length - 1 ? (Codice || ''):(headerIndex === headers.length - 2 ?(m2Caixa || ""):( UnVenda || ""))}
+                      readOnly
+                    />
+                  ) : (
+                    <>
+                      {headerIndex === 0 || filters[headers[headerIndex - 1]] ? (
+                        <select
+                          className="select-options"
+                          onChange={(e) => handleSelectChange(header, e.target.value)}
+                          value={filters[header] || ''}
+                        >
+                          <option value="">{getHeaderLabel(header)}</option>
+                          {getFilteredOptionsForColumn(header).map((value, index) => (
+                            <option key={index} value={value}>
+                              {value}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <select className="select-options" disabled>
+                          <option value="">{getHeaderLabel(header)}</option>
+                        </select>
+                      )}
+                    </>
+                  )}
                 </div>
               ))}
               <div >
