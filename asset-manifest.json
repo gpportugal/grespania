@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/gpp/static/css/main.671205f7.css",
-    "main.js": "/gpp/static/js/main.c17eeba1.js",
+    "main.js": "/gpp/static/js/main.10a101ab.js",
     "static/media/leroyMerlin.png": "/gpp/static/media/leroyMerlin.08b95884123d674b4e9c.png",
     "static/media/margres.png": "/gpp/static/media/margres.9604946867b92a3bb685.png",
     "index.html": "/gpp/index.html",
     "main.671205f7.css.map": "/gpp/static/css/main.671205f7.css.map",
-    "main.c17eeba1.js.map": "/gpp/static/js/main.c17eeba1.js.map"
+    "main.10a101ab.js.map": "/gpp/static/js/main.10a101ab.js.map"
   },
   "entrypoints": [
     "static/css/main.671205f7.css",
-    "static/js/main.c17eeba1.js"
+    "static/js/main.10a101ab.js"
   ]
 }
